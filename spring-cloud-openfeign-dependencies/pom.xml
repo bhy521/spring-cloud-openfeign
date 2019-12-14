@@ -13,7 +13,7 @@
 	<version>2.1.1.RELEASE</version>
 	<packaging>pom</packaging>
 	<name>spring-cloud-openfeign-dependencies</name>
-	<description>Spring Cloud OpenFeign Dependencies</description>
+	<description>Spring Cloud OpenFeign Dependencies For SHUN WANG</description>
 	<properties>
 		<feign.version>10.2.0</feign.version>
 		<feign-form.version>3.5.0</feign-form.version>
@@ -157,4 +157,15 @@
 			</pluginRepositories>
 		</profile>
 	</profiles>
+
+	<distributionManagement>
+		<repository>
+			<id>nexus-releases</id>
+			<url>http://nexus.shunwang.com/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>nexus-snapshots</id>
+			<url>http://nexus.shunwang.com/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>

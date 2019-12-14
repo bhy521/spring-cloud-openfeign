@@ -16,25 +16,7 @@
 
 package org.springframework.cloud.openfeign.support;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import feign.Contract;
-import feign.Feign;
-import feign.MethodMetadata;
-import feign.Param;
-import feign.Request;
-
+import feign.*;
 import org.springframework.cloud.openfeign.AnnotatedParameterProcessor;
 import org.springframework.cloud.openfeign.annotation.PathVariableParameterProcessor;
 import org.springframework.cloud.openfeign.annotation.QueryMapParameterProcessor;
@@ -56,6 +38,12 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
+import java.util.*;
 
 import static feign.Util.checkState;
 import static feign.Util.emptyToNull;
@@ -210,6 +198,18 @@ public class SpringMvcContract extends Contract.BaseContract
 	@Override
 	protected void processAnnotationOnMethod(MethodMetadata data,
 			Annotation methodAnnotation, Method method) {
+		// Method options
+		Class<? extends Annotation> annotationType = methodAnnotation.annotationType();
+		if (annotationType == FeignMethodOptions.class) {
+			FeignMethodOptions feignMethodOptions = method
+				.getDeclaredAnnotation(FeignMethodOptions.class);
+			Request.Options options = new Request.Options(
+				feignMethodOptions.connectTimeoutMillis(),
+				feignMethodOptions.readTimeoutMillis(),
+				feignMethodOptions.followRedirects());
+			data.setOptions(options);
+		}
+
 		if (!RequestMapping.class.isInstance(methodAnnotation) && !methodAnnotation
 				.annotationType().isAnnotationPresent(RequestMapping.class)) {
 			return;

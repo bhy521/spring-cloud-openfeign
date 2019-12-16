@@ -200,15 +200,7 @@ public class SpringMvcContract extends Contract.BaseContract
 			Annotation methodAnnotation, Method method) {
 		// Method options
 		Class<? extends Annotation> annotationType = methodAnnotation.annotationType();
-		if (annotationType == FeignMethodOptions.class) {
-			FeignMethodOptions feignMethodOptions = method
-					.getDeclaredAnnotation(FeignMethodOptions.class);
-			Request.Options options = new Request.Options(
-					feignMethodOptions.connectTimeoutMillis(),
-					feignMethodOptions.readTimeoutMillis(),
-					feignMethodOptions.followRedirects());
-			data.setOptions(options);
-		}
+		processAnnotationFeignMethodOptions(data, annotationType, method);
 
 		if (!RequestMapping.class.isInstance(methodAnnotation) && !methodAnnotation
 				.annotationType().isAnnotationPresent(RequestMapping.class)) {
